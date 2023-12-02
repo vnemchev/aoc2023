@@ -7,11 +7,12 @@ const bag = {
 const solve = input => {
     const possibleGames = [];
     input.split('\n').forEach(row => {
+        let validGame = true;
         const [game, rest] = row.split(': ');
         const gameId = Number(game.split(' ')[1]);
-        let validGame = true;
         const moves = rest.split('; ');
         const movesL = moves.length;
+
         for (let i = 0; i < movesL; i++) {
             const move = moves[i];
             const cubes = move.split(', ');
