@@ -2,21 +2,30 @@ function solve(input) {
     const splitInput = input.split('\n');
     const numbersDict = createNumberDict(splitInput);
     const symbolsDict = createSymbolsDict(splitInput);
-    const partNumbers = [];
 
-    numbersDict.forEach(number => {
-        const isPartNum = symbolsDict.some(symbol => {
-            const inAdjacentRow =
-                symbol.row >= number.row - 1 && symbol.row <= number.row + 1;
-            const inAdjacentCol =
-                symbol.index >= number.startIndex - 1 &&
-                symbol.index <= number.endIndex;
-            return inAdjacentRow && inAdjacentCol;
+    console.log(partOne());
+    // console.log(partTwo());
+
+    function partOne() {
+        const partNumbers = [];
+
+        numbersDict.forEach(number => {
+            const isPartNum = symbolsDict.some(symbol => {
+                const inAdjacentRow =
+                    symbol.row >= number.row - 1 &&
+                    symbol.row <= number.row + 1;
+                const inAdjacentCol =
+                    symbol.index >= number.startIndex - 1 &&
+                    symbol.index <= number.endIndex;
+                return inAdjacentRow && inAdjacentCol;
+            });
+            if (isPartNum) partNumbers.push(number.value);
         });
-        if (isPartNum) partNumbers.push(number.value);
-    });
 
-    return partNumbers.reduce((acc, curr) => acc + curr, 0);
+        return partNumbers.reduce((acc, curr) => acc + curr, 0);
+    }
+
+    function partTwo() {}
 }
 
 function createNumberDict(input) {
