@@ -1,17 +1,42 @@
 function solve(input) {
+    const splitInput = input.split('\n');
+    const numbersDict = createNumberDict(splitInput);
+    const symbolsDict = createSymbolsDict(splitInput);
+}
+
+function createNumberDict(input) {
     const numbers = [];
-    input.split('\n').forEach((row, i) => {
+    input.forEach((row, i) => {
         const matches = [...row.matchAll(/\d+/dg)];
-        matches.forEach(match => {
-            numbers.push({
-                value: Number(match[0]),
-                row: i,
-                startIndex: match.indices[0][0],
-                endIndex: match.indices[0][1],
+        if (matches.length) {
+            matches.forEach(match => {
+                numbers.push({
+                    value: Number(match[0]),
+                    row: i,
+                    startIndex: match.indices[0][0],
+                    endIndex: match.indices[0][1],
+                });
             });
-        });
+        }
     });
-    numbers.forEach(n => console.log(n));
+    return numbers;
+}
+
+function createSymbolsDict(input) {
+    const symbols = [];
+    input.forEach((row, i) => {
+        const matches = [...row.matchAll(/[^\d|.|\s]/dg)];
+        if (matches.length) {
+            matches.forEach(match => {
+                symbols.push({
+                    value: match[0],
+                    row: i,
+                    index: match.index,
+                });
+            });
+        }
+    });
+    return symbols;
 }
 
 solve(`467..114..
