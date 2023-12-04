@@ -9,7 +9,6 @@ function solve(input) {
 
 function partOne(numbersDict, symbolsDict) {
     const partNumbers = [];
-
     numbersDict.forEach(number => {
         const isPartNum = symbolsDict.some(symbol => {
             const inAdjacentRow =
