@@ -1,8 +1,10 @@
 function solve(input) {
     const digitRegex = /\d+/g;
     const splitInput = input.split('\n').filter(a => a != '');
-    const seeds = createSeeds(splitInput, digitRegex);
-    const almanach = createAlmanach(splitInput, digitRegex);
+    const seeds = createSeeds(...splitInput.slice(0, 1), digitRegex);
+    const almanach = createAlmanach(splitInput.slice(1), digitRegex);
+    const seedRangeCol = createSeedRangeCollection(seeds);
+
     const transformedSeeds = [];
 
     for (const seed of seeds) {
@@ -26,8 +28,23 @@ function solve(input) {
     console.log(Math.min(...transformedSeeds));
 }
 
+function createSeedRangeCollection(seeds) {
+    const seedsL = seeds.length;
+    const seedRangeCol = [];
+    for (let i = 0; i < seedsL; i += 2) {
+        const start = seeds[i];
+        const rangeL = seeds[i + 1];
+
+        for (let j = 0; j < rangeL; j++) {
+            const num = start + j;
+            seedRangeCol.push(num);
+        }
+    }
+    return seedRangeCol;
+}
+
 function createSeeds(input, regex) {
-    return input.shift().match(regex).map(Number);
+    return input.match(regex).map(Number);
 }
 
 function createAlmanach(input, regex) {
