@@ -23,14 +23,6 @@ function solve(input) {
     console.log(Math.min(...transformedSeeds));
 }
 
-function createRangeArrays(range, rangeL) {
-    const arr = [];
-    for (let i = 0; i < rangeL; i++) {
-        arr.push(i + range);
-    }
-    return arr;
-}
-
 function createSeedsAndAlmanach(input) {
     const regex = /\d+/g;
     const inputRows = input.split('\n').filter(a => a != '');
