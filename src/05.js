@@ -3,8 +3,13 @@ function solve(input) {
     const splitInput = input.split('\n').filter(a => a != '');
     const seeds = createSeeds(...splitInput.slice(0, 1), digitRegex);
     const almanach = createAlmanach(splitInput.slice(1), digitRegex);
-    const seedRangeCol = createSeedRangeCollection(seeds);
+    const seedRangeColection = createSeedRangeCollection(seeds);
+    const { min } = partOne(seeds, almanach);
 
+    console.log(`Part 1: ${min}`);
+}
+
+function partOne(seeds, almanach) {
     const transformedSeeds = [];
 
     for (const seed of seeds) {
@@ -25,7 +30,7 @@ function solve(input) {
         }
         transformedSeeds.push(transformedSeed);
     }
-    console.log(Math.min(...transformedSeeds));
+    return { transformedSeeds, min: Math.min(...transformedSeeds) };
 }
 
 function createSeedRangeCollection(seeds) {
