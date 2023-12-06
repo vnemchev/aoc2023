@@ -1,7 +1,37 @@
 function solve(input) {
-    const { seeds, almanach } = createSeedsAndAlmanach(input);
+    const digitRegex = /\d+/g;
+    const splitInput = input.split('\n').filter(a => a != '');
+
+    const seeds = createSeeds(...splitInput.slice(0, 1), digitRegex);
+    const almanach = createAlmanach(splitInput.slice(1), digitRegex);
+    const seedRanges = createSeedRanges(seeds);
+
+    const { min1 } = partOne(seeds, almanach);
+    const { min2 } = partTwo(seedRanges, almanach);
+    console.log(`Part 1: ${min1}`);
+    console.log(`Part 2: ${min2}`);
+    // const seedRangeColection = createSeedRangeCollection(seeds);
+}
+
+function partTwo(seedRanges, almanach) {
+    for (const seedRange of seedRanges) {
+        for (const values of almanach.values()) {
+            for (const value of values) {
+                const { destRange, srcRange, rangeL } = value;
+                const srcEnd = srcRange + rangeL;
+                const destEnd = destRange + rangeL;
+                const outOfBounds =
+                    seedRange.start < srcRange && seedRange.end <= srcRange ||
+                    seedRange.start >= srcEnd && seedRange.end > srcEnd;
+                if (outOfBounds) continue;
+            }
+        }
+    }
+}
+
+function partOne(seeds, almanach) {
     const transformedSeeds = [];
-    
+
     for (const seed of seeds) {
         let transformedSeed = seed;
         for (const values of almanach.values()) {
@@ -20,17 +50,42 @@ function solve(input) {
         }
         transformedSeeds.push(transformedSeed);
     }
-    console.log(Math.min(...transformedSeeds));
+    return { transformedSeeds, min: Math.min(...transformedSeeds) };
 }
 
-function createSeedsAndAlmanach(input) {
-    const regex = /\d+/g;
-    const inputRows = input.split('\n').filter(a => a != '');
-    const seeds = inputRows.shift().match(regex).map(Number);
+function createSeedRanges(seeds) {
+    const seedsL = seeds.length;
+    const seedRanges = [];
+    for (let i = 0; i < seedsL; i += 2) {
+        seedRanges.push({
+            start: seeds[i],
+            range: seeds[i + 1],
+            end: seeds[i] + seeds[i + 1],
+        });
+    }
+    return seedRanges;
+}
+
+function createSeedRangeCollection(seeds) {
+    const seedsL = seeds.length;
+    const seedRangeCol = [];
+    for (let i = 0; i < seedsL; i += 2) {
+        for (let j = 0; j < seeds[i + 1]; j++) {
+            seedRangeCol.push(seeds[i] + j);
+        }
+    }
+    return seedRangeCol;
+}
+
+function createSeeds(input, regex) {
+    return input.match(regex).map(Number);
+}
+
+function createAlmanach(input, regex) {
     const almanach = new Map();
     let mapKey = '';
 
-    inputRows.forEach(row => {
+    input.forEach(row => {
         if (isNaN(Number(row[0]))) {
             mapKey = row.split(' ')[0];
             almanach.set(mapKey, []);
@@ -41,42 +96,42 @@ function createSeedsAndAlmanach(input) {
             almanach.set(mapKey, steps);
         }
     });
-    return { seeds, almanach };
+    return almanach;
 }
 
-// solve(`seeds: 79 14 55 13
+solve(`seeds: 79 14 55 13
 
-// seed-to-soil map:
-// 50 98 2
-// 52 50 48
+seed-to-soil map:
+50 98 2
+52 50 48
 
-// soil-to-fertilizer map:
-// 0 15 37
-// 37 52 2
-// 39 0 15
+soil-to-fertilizer map:
+0 15 37
+37 52 2
+39 0 15
 
-// fertilizer-to-water map:
-// 49 53 8
-// 0 11 42
-// 42 0 7
-// 57 7 4
+fertilizer-to-water map:
+49 53 8
+0 11 42
+42 0 7
+57 7 4
 
-// water-to-light map:
-// 88 18 7
-// 18 25 70
+water-to-light map:
+88 18 7
+18 25 70
 
-// light-to-temperature map:
-// 45 77 23
-// 81 45 19
-// 68 64 13
+light-to-temperature map:
+45 77 23
+81 45 19
+68 64 13
 
-// temperature-to-humidity map:
-// 0 69 1
-// 1 0 69
+temperature-to-humidity map:
+0 69 1
+1 0 69
 
-// humidity-to-location map:
-// 60 56 37
-// 56 93 4`);
+humidity-to-location map:
+60 56 37
+56 93 4`);
 
 solve(`seeds: 194657215 187012821 1093203236 6077151 44187305 148722449 2959577030 152281079 3400626717 198691716 1333399202 287624830 2657325069 35258407 1913289352 410917164 1005856673 850939 839895010 162018909
 
