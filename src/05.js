@@ -1,13 +1,15 @@
 function solve(input) {
     const digitRegex = /\d+/g;
     const splitInput = input.split('\n').filter(a => a != '');
+
     const seeds = createSeeds(...splitInput.slice(0, 1), digitRegex);
     const almanach = createAlmanach(splitInput.slice(1), digitRegex);
     const seedRanges = createSeedRanges(seeds);
-    const { transformedSeeds, min1 } = partOne(seeds, almanach);
+
+    const { min1 } = partOne(seeds, almanach);
     const { min2 } = partTwo(seedRanges, almanach);
     console.log(`Part 1: ${min1}`);
-
+    console.log(`Part 2: ${min2}`);
     // const seedRangeColection = createSeedRangeCollection(seeds);
 }
 
