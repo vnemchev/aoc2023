@@ -11,7 +11,21 @@ function solve(input) {
     // const seedRangeColection = createSeedRangeCollection(seeds);
 }
 
-function partTwo() {}
+function partTwo(seedRanges, almanach) {
+    for (const seedRange of seedRanges) {
+        for (const values of almanach.values()) {
+            for (const value of values) {
+                const { destRange, srcRange, rangeL } = value;
+                const srcEnd = srcRange + rangeL;
+                const destEnd = destRange + rangeL;
+                const outOfBounds =
+                    seedRange.start < srcRange && seedRange.end <= srcRange ||
+                    seedRange.start >= srcEnd && seedRange.end > srcEnd;
+                if (outOfBounds) continue;
+            }
+        }
+    }
+}
 
 function partOne(seeds, almanach) {
     const transformedSeeds = [];
@@ -41,9 +55,11 @@ function createSeedRanges(seeds) {
     const seedsL = seeds.length;
     const seedRanges = [];
     for (let i = 0; i < seedsL; i += 2) {
-        const start = seeds[i];
-        const rangeL = seeds[i + 1];
-        seedRanges.push({ start, rangeL });
+        seedRanges.push({
+            start: seeds[i],
+            range: seeds[i + 1],
+            end: seeds[i] + seeds[i + 1],
+        });
     }
     return seedRanges;
 }
@@ -52,12 +68,8 @@ function createSeedRangeCollection(seeds) {
     const seedsL = seeds.length;
     const seedRangeCol = [];
     for (let i = 0; i < seedsL; i += 2) {
-        const start = seeds[i];
-        const rangeL = seeds[i + 1];
-
-        for (let j = 0; j < rangeL; j++) {
-            const num = start + j;
-            seedRangeCol.push(num);
+        for (let j = 0; j < seeds[i + 1]; j++) {
+            seedRangeCol.push(seeds[i] + j);
         }
     }
     return seedRangeCol;
