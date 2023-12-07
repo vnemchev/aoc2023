@@ -1,26 +1,15 @@
-solve(`32T3K 765
-T55J5 684
-KK677 28
-KTJJT 220
-QQQJA 483`);
-
-// solve(`KK677 28
-// KTJJT 220`);
-
 function solve(input) {
     const splitInput = input.split('\n');
     const splitInputL = splitInput.length;
+
+    console.log(`Part 1: ${partOne(splitInput, splitInputL)}`);
+}
+
+function partOne(splitInput, splitInputL) {
     const hands = {};
-
     for (let i = 0; i < splitInputL; i++) {
-        if (i === splitInputL - 1) {
-            break;
-        }
-        const row = splitInput[i];
-        const [handStr, bidStr] = row.split(' ');
-        const hand = handStr.split('');
-        const handType = getHandType(hand);
-
+        if (i === splitInputL - 1) break;
+        const [hand, handType, handStr, bidStr] = parseRow(splitInput[i]);
         if (!hands[handStr])
             hands[handStr] = {
                 wins: 0,
@@ -29,37 +18,51 @@ function solve(input) {
 
         const restOfInput = splitInput.slice(i + 1);
         const restOfInputL = restOfInput.length;
-        // implement 2nd loop to compare iwth all next else
         for (let j = 0; j < restOfInputL; j++) {
-            const nextRow = restOfInput[j];
-            const [nextHandStr, nextBidStr] = nextRow.split(' ');
-            const nextHand = nextHandStr.split('');
-            const nextHandType = getHandType(nextHand);
-
+            const [nextHand, nextHandType, nextHandStr, nextBidStr] = parseRow(
+                restOfInput[j],
+            );
             if (!hands[nextHandStr])
                 hands[nextHandStr] = {
                     wins: 0,
                     bid: Number(nextBidStr),
                 };
 
-            if (handType > nextHandType) hands[handStr].wins++;
-
-            if (handType < nextHandType) hands[nextHandStr].wins++;
-
-            if (handType === nextHandType)
-                if (compareByCard(hand, nextHand)) {
-                    hands[handStr].wins++;
-                } else {
-                    hands[nextHandStr].wins++;
-                }
+            compareHands(
+                hands,
+                hand,
+                handType,
+                handStr,
+                nextHand,
+                nextHandType,
+                nextHandStr,
+            );
         }
     }
+
     let result = 0;
     Object.values(hands).forEach(hand => {
         const rank = hand.wins + 1;
         result += hand.bid * rank;
     });
-    console.log(result);
+    return result;
+}
+
+function compareHands(
+    handsObj,
+    hand,
+    handType,
+    handStr,
+    nextHand,
+    nextHandType,
+    nextHandStr,
+) {
+    if (handType > nextHandType) handsObj[handStr].wins++;
+    if (handType < nextHandType) handsObj[nextHandStr].wins++;
+    if (handType === nextHandType)
+        if (compareByCard(hand, nextHand)) handsObj[handStr].wins++;
+        else handsObj[nextHandStr].wins++;
+    return handsObj;
 }
 
 function compareByCard(hand, nextHand) {
@@ -84,24 +87,24 @@ function getHandType(hand) {
     if (cardsL === 5) return new Set(cards).size === 1 ? 6 : 4;
 }
 
-function getCardPoints(card) {
-    const cardPoints = [
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        'T',
-        'J',
-        'Q',
-        'K',
-        'A',
-    ];
-    return cardPoints.indexOf(card);
+function parseRow(row) {
+    const [handStr, bidStr] = row.split(' ');
+    const hand = handStr.split('');
+    const handType = getHandType(hand);
+
+    return [hand, handType, handStr, bidStr];
 }
+
+const getCardPoints = card =>
+    ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'].indexOf(
+        card,
+    );
+
+solve(`32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483`);
 
 solve(`557T5 626
 A777A 673
