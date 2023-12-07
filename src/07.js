@@ -46,7 +46,6 @@ function partTwo(splitInput, splitInputL) {
             let currentNextHandType;
             if (nextJokerHandType) currentNextHandType = nextJokerHandType;
             else currentNextHandType = nextHandType;
-
             if (!hands[nextHandStr]) hands[nextHandStr] = { wins: 0, bid };
             compareHands(
                 hands,
@@ -141,12 +140,7 @@ function getHandType(hand) {
     const cards = hand.filter(
         card => hand.indexOf(card) !== hand.lastIndexOf(card),
     );
-    const cardsL = cards.length;
-    if (cardsL === 0) return 0;
-    if (cardsL === 2) return 1;
-    if (cardsL === 3) return 3;
-    if (cardsL === 4) return new Set(cards).size === 1 ? 5 : 2;
-    if (cardsL === 5) return new Set(cards).size === 1 ? 6 : 4;
+    return getBaseHandType(cards);
 }
 
 function getJokerHandType(hand) {
@@ -154,16 +148,18 @@ function getJokerHandType(hand) {
         card => hand.indexOf(card) !== hand.lastIndexOf(card),
     );
     const jokerCount = hand.filter(card => card === 'J').length;
-    const cardsL = cards.length;
+    return getBaseHandType(cards) + jokerCount;
+}
 
+function getBaseHandType(cards) {
+    const cardsL = cards.length;
     let handType = 0;
     if (cardsL === 0) handType = 0;
     if (cardsL === 2) handType = 1;
     if (cardsL === 3) handType = 3;
     if (cardsL === 4) handType = new Set(cards).size === 1 ? 5 : 2;
     if (cardsL === 5) handType = new Set(cards).size === 1 ? 6 : 4;
-
-    return handType + jokerCount;
+    return handType;
 }
 
 const getCardPoints = card =>
