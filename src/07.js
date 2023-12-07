@@ -7,27 +7,19 @@ function solve(input) {
 
 function partOne(splitInput, splitInputL) {
     const hands = {};
+    let allRanks = 0;
     for (let i = 0; i < splitInputL; i++) {
         if (i === splitInputL - 1) break;
-        const [hand, handType, handStr, bidStr] = parseRow(splitInput[i]);
-        if (!hands[handStr])
-            hands[handStr] = {
-                wins: 0,
-                bid: Number(bidStr),
-            };
+        const [hand, handType, handStr, bid] = parseRow(splitInput[i]);
+        if (!hands[handStr]) hands[handStr] = { wins: 0, bid };
 
         const restOfInput = splitInput.slice(i + 1);
         const restOfInputL = restOfInput.length;
         for (let j = 0; j < restOfInputL; j++) {
-            const [nextHand, nextHandType, nextHandStr, nextBidStr] = parseRow(
+            const [nextHand, nextHandType, nextHandStr, bid] = parseRow(
                 restOfInput[j],
             );
-            if (!hands[nextHandStr])
-                hands[nextHandStr] = {
-                    wins: 0,
-                    bid: Number(nextBidStr),
-                };
-
+            if (!hands[nextHandStr]) hands[nextHandStr] = { wins: 0, bid };
             compareHands(
                 hands,
                 hand,
@@ -39,13 +31,11 @@ function partOne(splitInput, splitInputL) {
             );
         }
     }
-
-    let result = 0;
     Object.values(hands).forEach(hand => {
         const rank = hand.wins + 1;
-        result += hand.bid * rank;
+        allRanks += hand.bid * rank;
     });
-    return result;
+    return allRanks;
 }
 
 function compareHands(
@@ -89,10 +79,11 @@ function getHandType(hand) {
 
 function parseRow(row) {
     const [handStr, bidStr] = row.split(' ');
+    const bid = Number(bidStr);
     const hand = handStr.split('');
     const handType = getHandType(hand);
 
-    return [hand, handType, handStr, bidStr];
+    return [hand, handType, handStr, bid];
 }
 
 const getCardPoints = card =>
