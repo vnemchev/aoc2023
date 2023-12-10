@@ -1,12 +1,5 @@
 function solve(input) {
-    const splitInput = input.split('\n').filter(e => e != '');
-    const instructions = splitInput.shift();
-
-    const nodes = splitInput.map(row => {
-        const [node, nextLeft, nextRight] = row.match(/[A-Z]+/g);
-        return { node, nextLeft, nextRight };
-    });
-
+    const { nodes, instructions } = parseInput(input);
     let currentNode = nodes.find(n => n.node === 'AAA');
     const goalNode = nodes.find(n => n.node === 'ZZZ');
     let steps = 0;
@@ -27,6 +20,16 @@ function solve(input) {
         if (currentNode.node === goalNode.node) break;
     }
     console.log(steps);
+}
+
+function parseInput(input) {
+    const splitInput = input.split('\n').filter(e => e != '');
+    const instructions = splitInput.shift();
+    const nodes = splitInput.map(row => {
+        const [node, nextLeft, nextRight] = row.match(/[A-Z]+/g);
+        return { node, nextLeft, nextRight };
+    });
+    return { nodes, instructions };
 }
 
 solve(`LRRRLRRRLRRLRLRRLRLRRLRRLRLLRRRLRLRLRRRLRRRLRLRLRLLRRLLRRLRRRLLRLRRRLRLRLRRRLLRLRRLRRRLRLRRRLLRLRRLRRRLRRLRRLRLRRLRRRLRLRRRLRRLLRRLRRLRLRRRLRRLRRRLRRRLRLRRLRLRRRLRLRRLRRLRRRLRRRLRRRLLRRLRRRLRLRLRLRRRLRLRLRRLRRRLRRRLRRLRRLLRLRRLLRLRRLRRLLRLLRRRLLRRLLRRLRRLRLRLRRRLLRRLRRRR
