@@ -2,42 +2,24 @@ const HASHTAG = '#';
 const DOT = '.';
 
 function solve(input) {
-    const { namedUniverse, universeCoords } = createMap(expandUniverse(input));
-    partOne(universeCoords);
+    const { universeCoords } = createMap(expandUniverse(input));
+    console.log(`Part 1: ${partOne(universeCoords)}`);
 }
 
 function partOne(universeCoords) {
-    const coordinates = Object.entries(universeCoords);
+    const coordinates = Object.values(universeCoords);
+    const distances = [];
     for (let i = 0; i < coordinates.length; i++) {
-        const [galaxy, coords] = coordinates[i];
-        let x1 = coords.x;
-        let y1 = coords.y;
-
+        const coords = coordinates[i];
         for (let j = i + 1; j < coordinates.length; j++) {
-            const [nextGalaxy, nextCoords] = coordinates[j];
-            const x2 = nextCoords.x;
-            const y2 = nextCoords.y;
-
-            if (galaxy === '1' && nextGalaxy === '7') {
-                let count = 0;
-                let coordToMove = 'x';
-                while (x1 !== x2 || y2 !== y2) {
-                    if (coordToMove === 'x') {
-                        if (x1 >= x2) x1--;
-                        if (x1 < x2) x1++;
-                        coordToMove = 'y';
-                    } else if (coordToMove === 'y') {
-                        if (y1 >= y2) y1--;
-                        if (y1 < y2) y1++;
-                        coordToMove = 'x';
-                    }
-                    count++;
-                }
-                console.log(`Galaxy ${galaxy} to Galaxy ${nextGalaxy}:`);
-                console.log(`Count: ${count}`);
-            }
+            const nextCoords = coordinates[j];
+            const distance =
+                Math.abs(coords.x - nextCoords.x) +
+                Math.abs(coords.y - nextCoords.y);
+            distances.push(distance);
         }
     }
+    return distances.reduce((acc, curr) => acc + curr, 0);
 }
 
 function createMap(universe) {
@@ -90,14 +72,3 @@ function expandRows(input) {
     }
     return universe;
 }
-
-solve(`...#......
-.......#..
-#.........
-..........
-......#...
-.#........
-.........#
-..........
-.......#..
-#...#.....`);
