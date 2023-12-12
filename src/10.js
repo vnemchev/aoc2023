@@ -2,21 +2,38 @@ const HASHTAG = '#';
 const DOT = '.';
 
 function solve(input) {
-    const universe = nameGalaxies(expandUniverse(input));
-    // nameGalaxies(universe);
-    console.log(universe);
+    const { namedUniverse, universeCoords } = createMap(expandUniverse(input));
+    // partOne(universe);
 }
 
-function nameGalaxies(universe) {
-    let galaxyNumber = 1;
+function partOne(universe) {
+    for (let i = 0; i < universe.length; i++) {
+        if (i === universe.length - 1) break;
+        if (universe[i].some(e => e !== HASHTAG))
+            if (current) {
+                // const currentRow
+            }
+
+        for (let j = 0; j < universe.length; j++) {
+            const nextRow = universe[j];
+        }
+    }
+}
+
+function createMap(universe) {
+    let galaxyNumber = 0;
     const namedUniverse = [];
-    universe.forEach(row => {
+    const universeCoords = {};
+    universe.forEach((row, i) => {
         while (row.some(e => e === HASHTAG)) {
-            row.splice(row.indexOf(HASHTAG), 1, galaxyNumber++);
+            row.splice(row.indexOf(HASHTAG), 1, ++galaxyNumber);
+            universeCoords[galaxyNumber] = {};
+            universeCoords[galaxyNumber].x = row.indexOf(galaxyNumber);
+            universeCoords[galaxyNumber].y = i;
         }
         namedUniverse.push(row);
     });
-    return namedUniverse;
+    return { namedUniverse, universeCoords };
 }
 
 function expandUniverse(input) {
