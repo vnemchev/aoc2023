@@ -3,19 +3,39 @@ const DOT = '.';
 
 function solve(input) {
     const { namedUniverse, universeCoords } = createMap(expandUniverse(input));
-    // partOne(universe);
+    partOne(universeCoords);
 }
 
-function partOne(universe) {
-    for (let i = 0; i < universe.length; i++) {
-        if (i === universe.length - 1) break;
-        if (universe[i].some(e => e !== HASHTAG))
-            if (current) {
-                // const currentRow
-            }
+function partOne(universeCoords) {
+    const coordinates = Object.entries(universeCoords);
+    for (let i = 0; i < coordinates.length; i++) {
+        const [galaxy, coords] = coordinates[i];
+        let x1 = coords.x;
+        let y1 = coords.y;
 
-        for (let j = 0; j < universe.length; j++) {
-            const nextRow = universe[j];
+        for (let j = i + 1; j < coordinates.length; j++) {
+            const [nextGalaxy, nextCoords] = coordinates[j];
+            const x2 = nextCoords.x;
+            const y2 = nextCoords.y;
+
+            if (galaxy === '1' && nextGalaxy === '7') {
+                let count = 0;
+                let coordToMove = 'x';
+                while (x1 !== x2 || y2 !== y2) {
+                    if (coordToMove === 'x') {
+                        if (x1 >= x2) x1--;
+                        if (x1 < x2) x1++;
+                        coordToMove = 'y';
+                    } else if (coordToMove === 'y') {
+                        if (y1 >= y2) y1--;
+                        if (y1 < y2) y1++;
+                        coordToMove = 'x';
+                    }
+                    count++;
+                }
+                console.log(`Galaxy ${galaxy} to Galaxy ${nextGalaxy}:`);
+                console.log(`Count: ${count}`);
+            }
         }
     }
 }
