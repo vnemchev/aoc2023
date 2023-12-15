@@ -14,4 +14,4 @@
 -   Day 12: [Hot Springs](https://adventofcode.com/2023/day/12)
 -   Day 13: [Point of Incidence](https://adventofcode.com/2023/day/13) - close
 -   Day 14: [Parabolic Reflector Dish](https://adventofcode.com/2023/day/14)
--   Day 15: [Lens Library](https://adventofcode.com/2023/day/15)
+-   Day 15: [Lens Library](https://adventofcode.com/2023/day/15) - 1 star
